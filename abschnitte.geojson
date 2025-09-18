@@ -35,24 +35,35 @@
     {
       "type": "Feature",
       "properties": {
+        "type": "section",
         "label": "Start Verein B",
-        "verein": "Start Verein B",
+        "verein": "section",
         "farbe": "#1f77b4"
       },
       "geometry": {
+        "type": "LineString",
         "coordinates": [
+          [
             8.620662641994512,
             50.13015277977972
           ],
-		  "type": "Point"
+          [
+            8.612398007778324,
+            50.12374163210305
+          ]
+        ]
       }
     },
-    {
+	    {
       "type": "Feature",
       "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
         "label": "Ende Verein B",
-        "verein": "Ende Verein B",
-        "farbe": "#1f77b4"
+        "type": "",
+        "verein": "#7e7e7e",
+        "farbe": "#ff7f0e"
       },
       "geometry": {
         "coordinates": [
@@ -61,7 +72,22 @@
         ],
         "type": "Point"
       },
+      "id": 3
     },
-	  }
+    {
+      "type": "Feature",
+      "properties": {
+        "verein": "Unbekannt",
+        "farbe": "#0000ff"
+      },
+      "geometry": {
+        "coordinates": [
+          8.621393388783304,
+          50.13173483270984
+        ],
+        "type": "Point"
+      },
+      "id": 4
+    }
   ]
 }
