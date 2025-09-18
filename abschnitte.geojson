@@ -35,9 +35,8 @@
     {
       "type": "Feature",
       "properties": {
-        "type": "section",
-        "label": "Start Verein B",
-        "verein": "section",
+        "label": "Start Verein A",
+        "verein": "Start Verein A",
         "farbe": "#1f77b4"
       },
       "geometry": {
@@ -57,13 +56,9 @@
 	    {
       "type": "Feature",
       "properties": {
-        "marker-color": "#7e7e7e",
-        "marker-size": "medium",
-        "marker-symbol": "circle",
-        "label": "Ende Verein B",
-        "type": "",
-        "verein": "#7e7e7e",
-        "farbe": "#ff7f0e"
+        "label": "Ende Verein A",
+        "verein": "Ende Verein A",
+        "farbe": "#1f77b4"
       },
       "geometry": {
         "coordinates": [
