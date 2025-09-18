@@ -4,7 +4,9 @@
     {
       "type": "Feature",
       "properties": {
-        "label": "Start SAK Anker"
+        "label": "Start SAK Anker",
+        "verein": "Start SAK Anker",
+        "farbe": "#0000ff"
       },
       "geometry": {
         "coordinates": [
@@ -17,7 +19,9 @@
     {
       "type": "Feature",
       "properties": {
-        "label": "Ende SAK Anker"
+        "label": "Ende SAK Anker",
+        "verein": "Ende SAK Anker",
+        "farbe": "#ffd700"
       },
       "geometry": {
         "coordinates": [
@@ -31,7 +35,9 @@
       "type": "Feature",
       "properties": {
         "type": "section",
-        "label": "Start Verein B"
+        "label": "Start Verein B",
+        "verein": "section",
+        "farbe": "#1f77b4"
       },
       "geometry": {
         "type": "LineString",
@@ -54,7 +60,9 @@
         "marker-size": "medium",
         "marker-symbol": "circle",
         "label": "Ende Verein B",
-        "type": ""
+        "type": "",
+        "verein": "#7e7e7e",
+        "farbe": "#ff7f0e"
       },
       "geometry": {
         "coordinates": [
@@ -67,7 +75,10 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "verein": "Unbekannt",
+        "farbe": "#0000ff"
+      },
       "geometry": {
         "coordinates": [
           8.621393388783304,
