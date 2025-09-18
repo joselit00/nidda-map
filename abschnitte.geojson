@@ -4,9 +4,8 @@
     {
       "type": "Feature",
       "properties": {
-        "label": "Start SAK Anker",
-        "verein": "Start SAK Anker",
-        "farbe": "#0000ff"
+      "verein": "Start SAK Anker",
+      "farbe": "#0000ff"
       },
       "geometry": {
         "coordinates": [
@@ -19,7 +18,6 @@
     {
       "type": "Feature",
       "properties": {
-        "label": "Ende SAK Anker",
         "verein": "Ende SAK Anker",
         "farbe": "#0000ff"
       },
@@ -31,10 +29,9 @@
         "type": "Point"
       }
     },
-		    {
+	{
       "type": "Feature",
       "properties": {
-        "label": "Ende Verein A",
         "verein": "Ende Verein A",
         "farbe": "#ffd700"
       },
@@ -44,13 +41,11 @@
           50.14167860000691
         ],
         "type": "Point"
-      },
-      "id": 3
+      }
     },
     {
       "type": "Feature",
       "properties": {
-        "label": "Ende Verein A",
         "verein": "Ende Verein A",
         "farbe": "#ffd700"
       },
@@ -60,8 +55,7 @@
           50.13173483270984
         ],
         "type": "Point"
-      },
-      "id": 4
+      }
     }
   ]
 }
