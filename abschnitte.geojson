@@ -1,0 +1,81 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "label": "Start SAK Anker"
+      },
+      "geometry": {
+        "coordinates": [
+          8.620662641994512,
+          50.13015277977972
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "label": "Ende SAK Anker"
+      },
+      "geometry": {
+        "coordinates": [
+          8.612398007778324,
+          50.12374163210305
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "section",
+        "label": "Start Verein B"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.620662641994512,
+            50.13015277977972
+          ],
+          [
+            8.612398007778324,
+            50.12374163210305
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "label": "Ende Verein B",
+        "type": ""
+      },
+      "geometry": {
+        "coordinates": [
+          8.618579590697948,
+          50.14167860000691
+        ],
+        "type": "Point"
+      },
+      "id": 3
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          8.621393388783304,
+          50.13173483270984
+        ],
+        "type": "Point"
+      },
+      "id": 4
+    }
+  ]
+}

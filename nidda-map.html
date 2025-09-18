@@ -1,0 +1,171 @@
+<!--
+NIDDA MAP - Readonly Leaflet Web‑App für GitHub Pages
+
+Datei: nidda-map.html (dieses Dokument)
+
+Was diese Version tut (angepasst an deine Wünsche):
+- Zeigt Punkte (Start + Ende) als farbige Marker; Start+Ende desselben Vereins verwenden dieselbe Farbe.
+- Es wird **keine Linie** zwischen Start und Ende gezeichnet.
+- Marker sind **nicht editierbar / nicht draggable** (read‑only). Du änderst die Daten, indem du die GeoJSON-Datei erneuerst und erneut auf GitHub hochlädst.
+- Lädt die Datei `abschnitte.geojson` aus dem gleichen Ordner (Repository root). Diese Datei ist die einzige Datei, die du jährlich anpasst.
+- Zeigt per Button deinen aktuellen Standort (funktioniert über HTTPS bzw. localhost).
+- Erzeugt automatisch eine Legende aus den in der GeoJSON angegebenen Vereinen und Farben.
+
+GeoJSON‑Erwartung (Kurzform):
+- Datei heißt: `abschnitte.geojson`
+- Format: FeatureCollection mit Point‑Features
+- Jedes Feature hat in `properties` mindestens: `verein` (String). Optional: `farbe` (Hex wie "#0000ff") und `role` (z.B. "start" oder "end").
+- Koordinaten: [LON, LAT]
+
+Beispiel (klein, so muss es aussehen):
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "verein": "Verein 1", "farbe": "#0000ff", "role": "start" }, "geometry": { "type": "Point", "coordinates": [8.620411857811689, 50.130788305620655] } },
+    { "type": "Feature", "properties": { "verein": "Verein 1", "farbe": "#0000ff", "role": "end" },   "geometry": { "type": "Point", "coordinates": [8.612398007778324, 50.12374163210305] } }
+  ]
+}
+
+Wie du aktualisierst: öffne die Datei `abschnitte.geojson` in einem Editor (z. B. https://geojson.io), speichere und lade sie wieder im GitHub‑Repository hoch (siehe Anleitung im Chat).
+
+-->
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nidda Karte (readonly)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html,body{height:100%;margin:0}
+    #map{height:100vh;width:100%}
+    .controls {
+      position: absolute; right: 10px; top: 10px; z-index: 1000;
+      background: rgba(255,255,255,0.95); padding: 10px; border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-family: Arial, sans-serif; font-size:14px;
+      max-width:320px;
+    }
+    .controls button{margin:6px 0; width:100%}
+    .small {font-size:12px; color:#333}
+    .legend-item{display:flex;align-items:center;margin:6px 0}
+    .legend-color{width:18px;height:18px;border-radius:3px;margin-right:8px;border:1px solid #666}
+    #info{margin-top:8px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="controls" id="controls">
+    <strong>Nidda Map — Anzeige</strong>
+    <div class="small" style="margin-top:6px">
+      Anzeige der Start/End‑Punkte pro Verein (read‑only).
+    </div>
+    <div style="margin-top:8px">
+      <button id="btnLocate">→ Standort anzeigen</button>
+    </div>
+    <div id="legend" style="margin-top:10px"></div>
+    <div id="info" class="small"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // KONFIG: Name der GeoJSON Datei (im selben Ordner / repo root)
+    const GEOJSON_URL = 'abschnitte.geojson';
+
+    // Karte initialisieren
+    const map = L.map('map').setView([50.13, 8.62], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap‑Mitwirkende'
+    }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+    let userMarker = null;
+
+    // Hilfsfarben, falls keine Farbe im GeoJSON angegeben ist
+    const defaultPalette = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f'];
+
+    // Lade GeoJSON
+    fetch(GEOJSON_URL).then(resp => {
+      if(!resp.ok) throw new Error('GeoJSON nicht gefunden (' + GEOJSON_URL + '). Stelle sicher, dass die Datei im selben Ordner liegt.');
+      return resp.json();
+    }).then(data => {
+      renderGeoJSON(data);
+    }).catch(err => {
+      document.getElementById('info').textContent = 'Fehler beim Laden der GeoJSON: ' + err.message + '\n\nTipp: teste lokal mit `python -m http.server 8000` im Ordner und rufe http://localhost:8000/nidda-map.html auf.';
+    });
+
+    function renderGeoJSON(fc) {
+      markersLayer.clearLayers();
+      // sammle Vereine und Farben
+      const legendMap = new Map(); // verein -> farbe
+      let autoColorIndex = 0;
+
+      // erste pass: register unique verein
+      (fc.features || []).forEach(f => {
+        if(!f || !f.geometry || f.geometry.type !== 'Point') return;
+        const p = f.properties || {};
+        const verein = p.verein || 'Unbekannt';
+        const farbe = p.farbe || null;
+        if(!legendMap.has(verein)) {
+          if(farbe) legendMap.set(verein, farbe);
+          else { legendMap.set(verein, defaultPalette[autoColorIndex % defaultPalette.length]); autoColorIndex++; }
+        }
+      });
+
+      // rendere die Marker
+      (fc.features || []).forEach((f,i) => {
+        if(!f || !f.geometry || f.geometry.type !== 'Point') return;
+        const coords = f.geometry.coordinates; // [lon, lat]
+        const p = f.properties || {};
+        const verein = p.verein || 'Unbekannt';
+        const role = p.role || '';
+        const farbe = p.farbe || legendMap.get(verein) || '#3388ff';
+
+        const latlng = [coords[1], coords[0]];
+        const circle = L.circleMarker(latlng, {
+          radius: 8,
+          fillColor: farbe,
+          color: '#222',
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.9
+        }).addTo(markersLayer);
+
+        const title = (role ? (role + ' — ') : '') + (verein || 'Verein');
+        circle.bindPopup('<strong>' + (verein || 'Verein') + '</strong><br/>' + (role ? (role + '<br/>') : '') + 'Koordinaten: ' + coords[1].toFixed(6) + ', ' + coords[0].toFixed(6));
+      });
+
+      // Baue Legende
+      const legendEl = document.getElementById('legend');
+      legendEl.innerHTML = '<strong>Legende</strong>';
+      legendMap.forEach((farbe, verein) => {
+        const div = document.createElement('div');
+        div.className = 'legend-item';
+        div.innerHTML = '<span class="legend-color" style="background:' + farbe + '"></span>' + verein;
+        legendEl.appendChild(div);
+      });
+
+      // Zoom auf alle Marker
+      try {
+        const bounds = markersLayer.getBounds();
+        if(bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+      } catch(e) { /* ignore */ }
+
+      document.getElementById('info').textContent = 'Anzahl Punkte: ' + (fc.features ? fc.features.length : 0) + '\n\nHinweis: Um Änderungen vorzunehmen, editiere die Datei abschnitte.geojson und lade sie neu auf GitHub.';
+    }
+
+    // Nutzer-Standort
+    document.getElementById('btnLocate').addEventListener('click', () => {
+      if(!navigator.geolocation){ alert('Geolocation wird von diesem Browser nicht unterstützt.'); return; }
+      map.locate({ setView: true, maxZoom: 16 });
+    });
+
+    map.on('locationfound', function(e){
+      if(userMarker) userMarker.setLatLng(e.latlng);
+      else userMarker = L.marker(e.latlng).addTo(map).bindPopup('Dein Standort');
+    });
+    map.on('locationerror', function(){ alert('Standort konnte nicht ermittelt werden. Hinweis: Geolocation funktioniert am zuverlässigsten über https oder bei Zugriff über http://localhost.'); });
+
+  </script>
+</body>
+</html>
