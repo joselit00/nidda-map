@@ -32,7 +32,7 @@
 	{
       "type": "Feature",
       "properties": {
-        "verein": "Start Verein A",
+        "verein": "Ende Verein A",
         "farbe": "#ffd700"
       },
       "geometry": {
@@ -46,7 +46,7 @@
     {
       "type": "Feature",
       "properties": {
-        "verein": "Ende Verein A",
+        "verein": "Start Verein A",
         "farbe": "#ffd700"
       },
       "geometry": {
