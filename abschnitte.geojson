@@ -31,29 +31,7 @@
         "type": "Point"
       }
     },
-	
-    {
-      "type": "Feature",
-      "properties": {
-        "label": "Start Verein A",
-        "verein": "Start Verein A",
-        "farbe": "#1f77b4"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            8.620662641994512,
-            50.13015277977972
-          ],
-          [
-            8.612398007778324,
-            50.12374163210305
-          ]
-        ]
-      }
-    },
-	    {
+		    {
       "type": "Feature",
       "properties": {
         "label": "Ende Verein A",
