@@ -36,7 +36,7 @@
       "properties": {
         "label": "Ende Verein A",
         "verein": "Ende Verein A",
-        "farbe": "#1f77b4"
+        "farbe": "#ffd700"
       },
       "geometry": {
         "coordinates": [
@@ -50,8 +50,9 @@
     {
       "type": "Feature",
       "properties": {
-        "verein": "Unbekannt",
-        "farbe": "#0000ff"
+        "label": "Ende Verein A",
+        "verein": "Ende Verein A",
+        "farbe": "#ffd700"
       },
       "geometry": {
         "coordinates": [
